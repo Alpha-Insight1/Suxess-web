@@ -249,7 +249,16 @@ function Admissions() {
           <p className="kicker">Admissions</p>
           <h2>Four simple steps</h2>
           <p className="body">Places are offered throughout the year, subject to space in each class.</p>
-          <ol className="steps">{steps.map(([t, d]) => <li key={t}><strong>{t}</strong><span>{d}</span></li>)}</ol>
+          <ol className="steps">
+            {steps.map(([t, d]) => (
+              <li key={t}>
+                <div className="step-body">
+                  <strong>{t}</strong>
+                  <span>{d}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
         <form className="form" onSubmit={submit}>
           <h3>Send an enquiry</h3>

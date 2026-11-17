@@ -24,7 +24,7 @@ export const school = {
     },
   ],
   social: {
-    TikTok: "https://www.tiktok.com/@suxess02",
+    TikTok: "https://www.tiktok.com/@suxess07",
     Instagram: "https://www.instagram.com/everythingsuxess",
     Facebook: "https://www.facebook.com/suxessschools",
   },
