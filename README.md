@@ -39,3 +39,17 @@ npm install
 npm run build
 ```
 Then upload the generated `dist` folder in Cloudflare Pages → Upload assets.
+
+
+## 3D design
+
+The 3D scenes are pure CSS 3D transforms (no WebGL, no extra dependencies), in `src/Stage3D.tsx`
+with styles at the bottom of `src/styles.css`.
+
+- `HeroStage`: floating book with an extruded gold "S", learning blocks, and a photo card that
+  flips through the `slides` list in `src/data.ts`. Follows the mouse; drag to rotate on touch screens.
+- `Stairs`: Nursery > Primary > Secondary steps in the Schools section.
+- Photos marked `data-tilt` tilt slightly on hover (desktop only).
+
+Everything scales with its container (1u = 1% of the stage width) and animations are switched off
+for visitors who prefer reduced motion.

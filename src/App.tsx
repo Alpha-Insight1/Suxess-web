@@ -1,5 +1,6 @@
-import { useState, useEffect, FormEvent } from "react";
-import { school, nav, schools, programmes, skills, steps, gallery, slides, features, stats } from "./data";
+import { useState, useEffect, FormEvent, KeyboardEvent } from "react";
+import { school, nav, schools, programmes, skills, steps, gallery, features, stats } from "./data";
+import { HeroStage, Stairs } from "./Stage3D";
 
 const Brand = () => <span className="name">Su<span className="x">x</span>ess</span>;
 const tel = (p: string) => `tel:${p.replace(/-/g, "")}`;
@@ -10,144 +11,120 @@ const paths: Record<string, string> = {
   home: "M3 11l9-7 9 7 M5 10v10h14V10 M10 20v-6h4v6",
   award: "M12 14a5 5 0 100-10 5 5 0 000 10z M8.5 13.5L7 21l5-3 5 3-1.5-7.5",
   coin: "M12 21a9 9 0 100-18 9 9 0 000 18z M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.4 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1.1 2-2.5 2c-1 0-2-.5-2.5-1.5 M12 6v2 M12 16v2",
-  book: "M4 5h7v14H4z M13 5h7v14h-7z",
 };
 const Icon = ({ n }: { n: string }) => (
-  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[n] || paths.book} /></svg>
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[n] || paths.shield} /></svg>
 );
-
-function TopBar() {
-  return (
-    <div className="topbar">
-      <div className="wrap topbar-in">
-        <span>{school.phones[0]}</span>
-        <span className="hide-sm">{school.email}</span>
-        <span className="hide-sm">Magboro, Ogun State</span>
-        <a className="open" href="#admissions">Admission open</a>
-      </div>
-    </div>
-  );
-}
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 8);
+    const esc = (e: globalThis.KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    on();
+    window.addEventListener("scroll", on, { passive: true });
+    window.addEventListener("keydown", esc);
+    return () => { window.removeEventListener("scroll", on); window.removeEventListener("keydown", esc); };
+  }, []);
   return (
-    <header className="header">
+    <header className={scrolled || open ? "header solid" : "header"}>
       <div className="wrap header-in">
-        <a href="#top" className="brand" aria-label={school.name}>
-          <img src="/crest.png" alt="" width="48" height="48" />
-          <span className="brand-text">
-            <Brand />
-            <small>Schools</small>
-          </span>
+        <a href="#top" className="brand" aria-label={`${school.name}, home`}>
+          <img src="/mark.png" alt="" width="44" height="44" />
+          <span className="brand-name"><Brand /> Schools</span>
         </a>
-        <button className="menu-btn" aria-expanded={open} aria-controls="nav" onClick={() => setOpen(!open)}>{open ? "Close" : "Menu"}</button>
-        <nav id="nav" className={open ? "nav open" : "nav"}>
+        <nav id="nav" className={open ? "nav open" : "nav"} aria-label="Main">
           {nav.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}
+          <a className="nav-cta" href="#admissions" onClick={() => setOpen(false)}>Enquire now</a>
         </nav>
+        <button className="menu-btn" aria-expanded={open} aria-controls="nav" onClick={() => setOpen(!open)}>
+          <span className="sr">{open ? "Close menu" : "Open menu"}</span>
+          <span className={open ? "bars on" : "bars"} aria-hidden="true"><i /><i /></span>
+        </button>
       </div>
     </header>
   );
 }
 
 function Hero() {
-  const [i, setI] = useState(0);
-  const go = (d: number) => setI((i + d + slides.length) % slides.length);
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setTimeout(() => setI((n) => (n + 1) % slides.length), 7000);
-    return () => clearTimeout(t);
-  }, [i]);
-  const s = slides[i];
   return (
     <section className="hero" id="top">
-      <div className="hero-bg" aria-hidden="true">
-        <img src={s.img} alt="" key={s.img} />
-      </div>
       <div className="wrap hero-in">
-        <h1>
-          <span>{s.title[0]}</span>
-          <span className="accent">{s.title[1]}</span>
-        </h1>
-        <p className="lead">{s.text}</p>
-        <div className="hero-actions">
-          <a className="btn btn-gold" href="#admissions">Admission open</a>
-          <a className="btn btn-line" href="#schools">Explore our schools</a>
+        <div className="hero-copy">
+          <h1>
+            <span>{school.motto[0]}</span>
+            <span>{school.motto[1]}</span>
+          </h1>
+          <p className="lead">Nursery, primary and secondary education built on character, discipline and academic excellence, in Ofada, Ogun State.</p>
+          <div className="hero-actions">
+            <a className="btn btn-gold" href="#admissions">Book a school visit</a>
+            <a className="btn btn-ghost-light" href="#schools">Explore our schools</a>
+          </div>
+          <p className="hero-contact">
+            Admissions are open. Call <a href={tel(school.phones[0])}>{school.phones[0]}</a> or{" "}
+            <a href={`https://wa.me/${school.whatsapp}`} target="_blank" rel="noreferrer">message us on WhatsApp</a>.
+          </p>
         </div>
-        <div className="hero-dots">
-          {slides.map((_, n) => (
-            <button
-              key={n}
-              className={n === i ? "on" : ""}
-              onClick={() => setI(n)}
-              aria-label={`Slide ${n + 1}`}
-            />
-          ))}
-        </div>
+        <HeroStage />
       </div>
-      <button className="hero-nav prev" onClick={() => go(-1)} aria-label="Previous slide">‹</button>
-      <button className="hero-nav next" onClick={() => go(1)} aria-label="Next slide">›</button>
     </section>
   );
 }
 
-function Features() {
+function Values() {
   return (
-    <div className="wrap feat-strip">
-      <div className="feat-grid">
+    <section className="values" aria-label="Why families choose Suxess">
+      <ul className="wrap values-in">
         {features.map(([t, d, ic]) => (
-          <div key={t} className="feat-item">
+          <li key={t}>
             <span className="ico"><Icon n={ic} /></span>
-            <strong>{t}</strong>
-            <span>{d}</span>
-          </div>
+            <span><strong>{t}</strong>{d}</span>
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 }
 
-function Welcome() {
+function About() {
   return (
     <section className="sec" id="about">
       <div className="wrap two">
-        <img className="photo lift" src="/life-cooking-class.jpg" alt="Students in green uniforms in a practical cooking class" loading="lazy" />
+        <img className="photo" data-tilt src="/life-chess.jpg" alt="Students playing chess on outdoor boards during a tournament" loading="lazy" style={{ objectPosition: "50% 40%" }} />
         <div>
-          <p className="kicker">Welcome to</p>
-          <h2><Brand /> Schools</h2>
-          <p className="body">Results follow habits. Our children learn to arrive prepared, work with care and treat others well, and the academic gains follow. {school.tagline}</p>
-          <p className="body">Three arms under one roof: <Brand /> Starlets for nursery and primary, <Brand /> High School for secondary, and the <Brand /> Tuition Centre for exam preparation and adult learners.</p>
-          <div className="stats">{stats.map(([a, b]) => <div key={b}><strong>{a}</strong><span>{b}</span></div>)}</div>
-          <a className="btn btn-green" href="#admissions">Book a school visit</a>
+          <h2>Results follow habits.</h2>
+          <p className="body">Our children learn to arrive prepared, work with care and treat others well, and the academic gains follow. {school.tagline}</p>
+          <p className="body">Three arms under one roof: Suxess Starlets for nursery and primary, Suxess High School for secondary, and the Suxess Tuition Centre for exam preparation and adult learners.</p>
+          <dl className="stats">{stats.map(([a, b]) => <div key={b}><dt>{b}</dt><dd>{a}</dd></div>)}</dl>
+          <a className="btn btn-dark" href="#admissions">Book a school visit</a>
         </div>
       </div>
     </section>
   );
 }
 
-function Explore() {
+function Schools() {
   return (
     <section className="sec tint" id="schools">
       <div className="wrap">
-        <p className="kicker">Our schools</p>
-        <h2>Small steps, big dreams.</h2>
-        <div className="explore">
-          <div className="levels">
-            {schools.map((l) => (
-              <article key={l.name} className="level">
-                <span className="ico"><Icon n="book" /></span>
-                <p className="brandline">{l.brand}</p>
-                <h3>{l.name}</h3>
-                <p className="range">{l.range}</p>
-                <p className="line">{l.line}</p>
-                <ul>{l.items.slice(0, 4).map((x) => <li key={x}>{x}</li>)}</ul>
-              </article>
-            ))}
+        <div className="sec-head with-3d">
+          <div>
+            <h2>Small steps, big dreams.</h2>
+            <p className="lede">One school family from a child's first day to graduation, with the same standards of discipline at every stage.</p>
           </div>
-          <div className="bubble">
-            <img src="/life-chess.jpg" alt="Students playing chess outdoors" loading="lazy" />
-            <div className="bubble-tag">Holistic growth<small>Mind · Character · Skills</small></div>
-          </div>
+          <Stairs />
+        </div>
+        <div className="levels">
+          {schools.map((l) => (
+            <article key={l.name} className="level">
+              <p className="brandline">{l.brand}</p>
+              <h3>{l.name}</h3>
+              <p className="range">{l.range}</p>
+              <p className="line">{l.line}</p>
+              <ul className="ticks">{l.items.map((x) => <li key={x}>{x}</li>)}</ul>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -157,20 +134,32 @@ function Explore() {
 function Programmes() {
   const [i, setI] = useState(0);
   const p = programmes[i];
+  const onKey = (e: KeyboardEvent) => {
+    const d = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const n = (i + d + programmes.length) % programmes.length;
+    setI(n);
+    (document.getElementById(`tab-${n}`) as HTMLElement | null)?.focus();
+  };
   return (
     <section className="sec" id="programmes">
       <div className="wrap">
-        <p className="kicker">Programmes</p>
-        <h2>Beyond the classroom</h2>
+        <div className="sec-head">
+          <h2>Beyond the classroom</h2>
+          <p className="lede">Exam coaching, language training, scholarships and digital skills for students and adult learners.</p>
+        </div>
         <div className="prog">
-          <div className="tabs" role="tablist" aria-label="Programmes">
-            {programmes.map((x, n) => <button key={x.name} role="tab" aria-selected={n === i} className={n === i ? "tab on" : "tab"} onClick={() => setI(n)}>{x.name}</button>)}
+          <div className="tabs" role="tablist" aria-label="Programmes" aria-orientation="vertical" onKeyDown={onKey}>
+            {programmes.map((x, n) => (
+              <button key={x.name} id={`tab-${n}`} role="tab" aria-selected={n === i} aria-controls="prog-panel" tabIndex={n === i ? 0 : -1} className={n === i ? "tab on" : "tab"} onClick={() => setI(n)}>{x.name}</button>
+            ))}
           </div>
-          <div className="panel" role="tabpanel">
+          <div className="panel" id="prog-panel" role="tabpanel" aria-labelledby={`tab-${i}`}>
             <h3>{p.name}</h3>
             <p className="range">{p.tag}</p>
-            <ul className="chips">{p.items.map((x) => <li key={x}>{x}</li>)}</ul>
-            <a className="btn btn-green" href="#admissions">Enquire about this</a>
+            <ul className="ticks cols">{p.items.map((x) => <li key={x}>{x}</li>)}</ul>
+            <a className="btn btn-dark" href="#admissions">Enquire about this</a>
           </div>
         </div>
         <div className="adult">
@@ -190,21 +179,16 @@ function Life() {
   return (
     <section className="sec tint" id="life">
       <div className="wrap">
-        <p className="kicker">Student life</p>
-        <h2>Learning beyond the classroom</h2>
-        <div className="strip">
-          {gallery.map((g) => (
-            <figure key={g.src}><img src={g.src} alt={g.alt} loading="lazy" /><figcaption>{g.caption}</figcaption></figure>
-          ))}
-          <figure>
-            <video
-              src="/life-activity.mp4"
-              controls
-              muted
-              playsInline
-              preload="metadata"
-              aria-label="Students taking part in Thursday morning physical exercise"
-            />
+        <div className="sec-head">
+          <h2>Learning beyond the textbook</h2>
+          <p className="lede">Cooking, chess, exercise and enterprise: the habits that make good students also make capable adults.</p>
+        </div>
+        <div className="mosaic">
+          <figure className="m-a" data-tilt><img src={gallery[0].src} alt={gallery[0].alt} loading="lazy" style={{ objectPosition: gallery[0].pos }} /><figcaption>{gallery[0].caption}</figcaption></figure>
+          <figure className="m-b" data-tilt><img src={gallery[2].src} alt={gallery[2].alt} loading="lazy" style={{ objectPosition: gallery[2].pos }} /><figcaption>{gallery[2].caption}</figcaption></figure>
+          <figure className="m-c" data-tilt><img src={gallery[1].src} alt={gallery[1].alt} loading="lazy" style={{ objectPosition: gallery[1].pos }} /><figcaption>{gallery[1].caption}</figcaption></figure>
+          <figure className="m-d" data-tilt>
+            <video src="/life-activity.mp4" poster="/life-activity-poster.jpg" controls muted playsInline preload="metadata" aria-label="Students taking part in Thursday morning physical exercise" />
             <figcaption>Thursday morning physical exercise</figcaption>
           </figure>
         </div>
@@ -222,13 +206,18 @@ function Life() {
 
 function Cta() {
   return (
-    <div className="wrap">
-      <div className="cta">
-        <img src="/crest.png" alt="" width="64" height="64" />
-        <div><h2>Admissions are open</h2><p>Give your child the best start for a bright tomorrow.</p></div>
-        <a className="btn btn-gold" href="#admissions">Enquire now</a>
+    <section className="cta">
+      <div className="wrap cta-in">
+        <div>
+          <h2>Admissions are open</h2>
+          <p>Give your child the best start for a bright tomorrow.</p>
+        </div>
+        <div className="cta-actions">
+          <a className="btn btn-gold" href="#admissions">Enquire now</a>
+          <a className="btn btn-ghost-light" href={tel(school.phones[0])}>Call {school.phones[0]}</a>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -244,19 +233,13 @@ function Admissions() {
   const options = [...schools.map((s) => s.name), ...programmes.map((p) => p.name)];
   return (
     <section className="sec" id="admissions">
-      <div className="wrap two">
+      <div className="wrap two top">
         <div>
-          <p className="kicker">Admissions</p>
           <h2>Four simple steps</h2>
           <p className="body">Places are offered throughout the year, subject to space in each class.</p>
           <ol className="steps">
             {steps.map(([t, d]) => (
-              <li key={t}>
-                <div className="step-body">
-                  <strong>{t}</strong>
-                  <span>{d}</span>
-                </div>
-              </li>
+              <li key={t}><strong>{t}</strong><span>{d}</span></li>
             ))}
           </ol>
         </div>
@@ -266,7 +249,8 @@ function Admissions() {
           <label>Phone number<input name="phone" type="tel" required autoComplete="tel" /></label>
           <label>Interested in<select name="level">{options.map((o) => <option key={o}>{o}</option>)}</select></label>
           <label>Message<textarea name="msg" rows={4} /></label>
-          <button className="btn btn-green" type="submit">Send enquiry</button>
+          <button className="btn btn-dark" type="submit">Send enquiry</button>
+          <p className="alt">Prefer to chat? <a href={`https://wa.me/${school.whatsapp}`} target="_blank" rel="noreferrer">Message us on WhatsApp</a>.</p>
           {sent && <p className="note" role="status">Your email app should open now. If not, write to {school.email} or WhatsApp us.</p>}
         </form>
       </div>
@@ -279,12 +263,12 @@ function Footer() {
     <footer className="footer" id="contact">
       <div className="wrap foot-in">
         <div>
-          <img src="/crest.png" alt="" width="56" height="56" />
+          <span className="tile"><img src="/mark.png" alt="" width="40" height="40" /></span>
           <p className="foot-name"><Brand /> Schools</p>
-          <p>{school.tagline}</p>
+          <p className="foot-tag">{school.tagline}</p>
         </div>
         <div>
-          <h3>Quick links</h3>
+          <h3>Explore</h3>
           {nav.map(([l, h]) => <p key={h}><a href={h}>{l}</a></p>)}
         </div>
         <div>
@@ -301,21 +285,43 @@ function Footer() {
           <p className="social">{Object.entries(school.social).map(([n, u]) => <a key={n} href={u} target="_blank" rel="noreferrer">{n}</a>)}</p>
         </div>
       </div>
-      <p className="wrap copy">© {new Date().getFullYear()} {school.name}. Suxess is success.</p>
+      <div className="wrap copy"><span>© {new Date().getFullYear()} {school.name}</span><span>Suxess is success.</span></div>
     </footer>
   );
 }
 
+function useTilt() {
+  useEffect(() => {
+    const ok = window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!ok) return;
+    const cleanups: (() => void)[] = [];
+    document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((el) => {
+      const move = (e: MouseEvent) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = `perspective(1000px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg)`;
+      };
+      const leave = () => { el.style.transform = ""; };
+      el.addEventListener("mousemove", move);
+      el.addEventListener("mouseleave", leave);
+      cleanups.push(() => { el.removeEventListener("mousemove", move); el.removeEventListener("mouseleave", leave); });
+    });
+    return () => cleanups.forEach((c) => c());
+  }, []);
+}
+
 export default function App() {
+  useTilt();
   return (
     <>
-      <TopBar />
       <Header />
       <main>
         <Hero />
-        <Features />
-        <Welcome />
-        <Explore />
+        <Values />
+        <About />
+        <Schools />
         <Programmes />
         <Life />
         <Cta />

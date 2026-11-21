@@ -169,35 +169,41 @@ export const gallery = [
   {
     src: "/life-cooking-class.jpg",
     alt: "Students in green uniforms learning practical cooking skills in the classroom",
-    caption: "Hands-on learning — cooking class",
+    caption: "Hands-on learning: cooking class",
+    pos: "60% 50%",
   },
   {
     src: "/life-outdoor-cooking.jpg",
     alt: "Students gathered outdoors for a practical cooking demonstration",
     caption: "Practical skills outdoors",
+    pos: "50% 40%",
   },
   {
     src: "/life-chess.jpg",
     alt: "Students playing chess on outdoor boards during a tournament",
     caption: "Chess club and strategy games",
+    pos: "50% 36%",
   },
 ];
 
 export const slides = [
   {
     img: "/life-cooking-class.jpg",
-    title: ["Discipline today,", "success tomorrow."],
-    text: "Nursery, primary and secondary education built on character, discipline and academic excellence.",
+    pos: "62% 50%",
+    label: "Practical learning",
+    text: "Cooking, enterprise and everyday skills, taught from the early years.",
   },
   {
     img: "/life-chess.jpg",
-    title: ["Minds that think,", "habits that last."],
+    pos: "50% 38%",
+    label: "Chess club",
     text: "Chess, clubs and challenges that teach patience, focus and fair play.",
   },
   {
     img: "/life-outdoor-cooking.jpg",
-    title: ["Learning beyond", "the textbook."],
-    text: "Practical skills, entrepreneurship and creativity from the early years to SSS 3.",
+    pos: "50% 42%",
+    label: "Beyond the textbook",
+    text: "Outdoor demonstrations that turn lessons into things children can do.",
   },
 ];
 
