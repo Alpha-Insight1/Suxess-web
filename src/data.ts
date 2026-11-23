@@ -207,7 +207,7 @@ export const slides = [
   },
   {
     img: "/hero-primary.jpg",
-    pos: "50% 22%",
+    pos: "50% 45%",
     tag: "",
     short: "03",
     title: "Foundations that last.",
