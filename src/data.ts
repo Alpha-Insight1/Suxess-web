@@ -189,7 +189,7 @@ export const gallery = [
 export const slides = [
   {
     img: "/hero-secondary.jpg",
-    pos: "50% 35%",
+    pos: "50% 18%",
     tag: "",
     short: "01",
     title: "Discipline today, success tomorrow.",
@@ -198,7 +198,7 @@ export const slides = [
   },
   {
     img: "/hero-nursery.jpg",
-    pos: "50% 40%",
+    pos: "50% 20%",
     tag: "",
     short: "02",
     title: "Where curiosity takes root.",
