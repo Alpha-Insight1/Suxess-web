@@ -89,14 +89,13 @@ function Hero() {
       {slides.map((s, k) => (
         <div
           key={s.img}
-          className={`hslide${k === i ? " on" : ""}${s.portrait ? " portrait" : ""}`}
+          className={`hslide${k === i ? " on" : ""}`}
           role="group"
           aria-roledescription="slide"
           aria-label={`${k + 1} of ${n}`}
           aria-hidden={k !== i}
         >
           <div className="hbg"><img className="hbg-img" src={s.img} alt="" style={{ objectPosition: s.pos }} /></div>
-          {s.portrait && <img className="hfg" src={s.img} alt="" />}
           <div className="wrap hcopy">
             <div className="hcopy-in">
               {k === 0
@@ -118,7 +117,6 @@ function Hero() {
             {slides.map((s, k) => (
               <button key={s.img} className={k === i ? "seg on" : "seg"} data-paused={paused} onClick={() => go(k)} aria-label={`Show slide ${k + 1}`} aria-current={k === i}>
                 {k === i && <i key={`${i}-${paused}`} />}
-                <span><b>0{k + 1}</b></span>
               </button>
             ))}
           </div>

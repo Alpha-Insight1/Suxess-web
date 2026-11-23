@@ -207,13 +207,12 @@ export const slides = [
   },
   {
     img: "/hero-primary.jpg",
-    pos: "50% 18%",
+    pos: "50% 22%",
     tag: "",
     short: "03",
     title: "Foundations that last.",
     text: "Clear progress in literacy and numeracy, guided by teachers who know every child and expect their best.",
     cta: ["Book a school visit", "#admissions"],
-    portrait: true,
   },
 ];
 
