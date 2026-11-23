@@ -116,29 +116,33 @@ h3 { font-size: 1.6rem; letter-spacing: -0.015em; }
   linear-gradient(90deg, rgba(6,32,24,0.92) 0%, rgba(6,32,24,0.74) 36%, rgba(6,32,24,0.28) 68%, rgba(6,32,24,0.12) 100%),
   linear-gradient(0deg, rgba(6,32,24,0.65) 0%, transparent 38%); }
 
-/* Portrait hero (primary): photo kept upright on the right, full group visible */
+/* Portrait hero (primary): upright photo, all faces visible, no empty turf */
 .hfg { display: none; }
 @media (min-width: 900px) {
   .hslide.portrait .hbg {
-    background: linear-gradient(115deg, #06221a 0%, #0c3a2b 45%, #145a40 100%);
+    background:
+      radial-gradient(ellipse 80% 70% at 70% 40%, rgba(20, 90, 64, 0.35), transparent 60%),
+      linear-gradient(115deg, #041a14 0%, #0a2f24 42%, #0f4a35 100%);
   }
   .hslide.portrait .hbg-img { display: none; }
   .hslide.portrait .hbg::after { display: none; }
   .hfg {
     display: block;
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: min(46%, 520px);
-    height: 100%;
+    top: 50%;
+    right: max(2.5rem, 4vw);
+    transform: translateY(-50%);
+    width: min(42%, 440px);
+    height: min(88%, 640px);
     object-fit: cover;
-    object-position: 50% 42%;
-    border-radius: 0;
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.55) 8%, #000 22%);
-    mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.55) 8%, #000 22%);
+    object-position: 50% 28%;
+    border-radius: 18px;
+    box-shadow:
+      0 24px 48px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(255, 255, 255, 0.08);
   }
-  .hslide.portrait .hcopy-in { max-width: 520px; }
+  .hslide.portrait .hcopy { align-items: center; }
+  .hslide.portrait .hcopy-in { max-width: 500px; }
 }
 
 .hcopy { position: absolute; inset: 0; display: flex; align-items: center; padding-bottom: 4.5rem; }
@@ -175,6 +179,8 @@ h3 { font-size: 1.6rem; letter-spacing: -0.015em; }
   .hlead { font-size: 1.05rem; margin-top: 1rem; }
   .hactions { margin-top: 1.5rem; }
   .arrows { display: none; }
+  /* On mobile portrait slides use full-bleed; favour faces over floor */
+  .hslide.portrait .hbg-img { object-position: 50% 28% !important; }
 }
 
 /* Values band */
