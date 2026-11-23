@@ -1,6 +1,6 @@
-import { useState, useEffect, FormEvent, KeyboardEvent } from "react";
-import { school, nav, schools, programmes, skills, steps, gallery, features, stats } from "./data";
-import { HeroStage, Stairs } from "./Stage3D";
+import { useState, useEffect, useRef, FormEvent, KeyboardEvent } from "react";
+import { school, nav, schools, programmes, skills, steps, gallery, slides, features, stats } from "./data";
+import { Stairs } from "./Stage3D";
 
 const Brand = () => <span className="name">Su<span className="x">x</span>ess</span>;
 const tel = (p: string) => `tel:${p.replace(/-/g, "")}`;
@@ -47,26 +47,87 @@ function Header() {
   );
 }
 
+const Chevron = ({ left = false }: { left?: boolean }) => (
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d={left ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"} />
+  </svg>
+);
+
+/** Full-width photo slider: one big headline, one line of copy and two buttons per slide. */
 function Hero() {
+  const n = slides.length;
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const swipe = useRef<number | null>(null);
+  const go = (k: number) => setI((k + n) % n);
+
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setTimeout(() => setI((v) => (v + 1) % n), 7000);
+    return () => clearTimeout(t);
+  }, [i, paused, n]);
+
   return (
-    <section className="hero" id="top">
-      <div className="wrap hero-in">
-        <div className="hero-copy">
-          <h1>
-            <span>{school.motto[0]}</span>
-            <span>{school.motto[1]}</span>
-          </h1>
-          <p className="lead">Nursery, primary and secondary education built on character, discipline and academic excellence, in Ofada, Ogun State.</p>
-          <div className="hero-actions">
-            <a className="btn btn-gold" href="#admissions">Book a school visit</a>
-            <a className="btn btn-ghost-light" href="#schools">Explore our schools</a>
+    <section
+      className="hero"
+      id="top"
+      aria-roledescription="carousel"
+      aria-label="Suxess Schools highlights"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+      onKeyDown={(e) => { if (e.key === "ArrowRight") go(i + 1); if (e.key === "ArrowLeft") go(i - 1); }}
+      onPointerDown={(e) => { if (e.pointerType === "touch") swipe.current = e.clientX; }}
+      onPointerUp={(e) => {
+        if (swipe.current === null) return;
+        const dx = e.clientX - swipe.current;
+        swipe.current = null;
+        if (Math.abs(dx) > 50) go(dx < 0 ? i + 1 : i - 1);
+      }}
+    >
+      {slides.map((s, k) => (
+        <div
+          key={s.img}
+          className={`hslide${k === i ? " on" : ""}${s.portrait ? " portrait" : ""}`}
+          role="group"
+          aria-roledescription="slide"
+          aria-label={`${k + 1} of ${n}`}
+          aria-hidden={k !== i}
+        >
+          <div className="hbg"><img className="hbg-img" src={s.img} alt="" style={{ objectPosition: s.pos }} /></div>
+          {s.portrait && <img className="hfg" src={s.img} alt="" />}
+          <div className="wrap hcopy">
+            <div className="hcopy-in">
+              <span className="htag">{s.tag}</span>
+              {k === 0
+                ? <h1 className="htitle">{s.title}</h1>
+                : <p className="htitle" role="heading" aria-level={2}>{s.title}</p>}
+              <p className="hlead">{s.text}</p>
+              <div className="hactions">
+                <a className="btn btn-gold" href="#admissions">Apply now</a>
+                <a className="btn btn-ghost-light" href={s.cta[1]}>{s.cta[0]}</a>
+              </div>
+            </div>
           </div>
-          <p className="hero-contact">
-            Admissions are open. Call <a href={tel(school.phones[0])}>{school.phones[0]}</a> or{" "}
-            <a href={`https://wa.me/${school.whatsapp}`} target="_blank" rel="noreferrer">message us on WhatsApp</a>.
-          </p>
         </div>
-        <HeroStage />
+      ))}
+
+      <div className="hero-ui">
+        <div className="wrap hero-ui-in">
+          <div className="segs" role="group" aria-label="Choose slide">
+            {slides.map((s, k) => (
+              <button key={s.img} className={k === i ? "seg on" : "seg"} data-paused={paused} onClick={() => go(k)} aria-label={`Show slide ${k + 1}: ${s.short}`} aria-current={k === i}>
+                {k === i && <i key={`${i}-${paused}`} />}
+                <span><b>0{k + 1}</b>{s.short}</span>
+              </button>
+            ))}
+          </div>
+          <div className="arrows">
+            <button className="arrow" onClick={() => go(i - 1)} aria-label="Previous slide"><Chevron left /></button>
+            <button className="arrow" onClick={() => go(i + 1)} aria-label="Next slide"><Chevron /></button>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -91,7 +152,7 @@ function About() {
   return (
     <section className="sec" id="about">
       <div className="wrap two">
-        <img className="photo" data-tilt src="/life-chess.jpg" alt="Students playing chess on outdoor boards during a tournament" loading="lazy" style={{ objectPosition: "50% 40%" }} />
+        <img className="photo" data-tilt src="/about-students.jpg" alt="Three Suxess High School students in green jackets reading together from their textbooks" loading="lazy" width="1200" height="900" style={{ objectPosition: "50% 35%" }} />
         <div>
           <h2>Results follow habits.</h2>
           <p className="body">Our children learn to arrive prepared, work with care and treat others well, and the academic gains follow. {school.tagline}</p>

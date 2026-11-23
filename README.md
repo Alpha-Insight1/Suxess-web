@@ -46,10 +46,15 @@ Then upload the generated `dist` folder in Cloudflare Pages → Upload assets.
 The 3D scenes are pure CSS 3D transforms (no WebGL, no extra dependencies), in `src/Stage3D.tsx`
 with styles at the bottom of `src/styles.css`.
 
-- `HeroStage`: floating book with an extruded gold "S", learning blocks, and a photo card that
-  flips through the `slides` list in `src/data.ts`. Follows the mouse; drag to rotate on touch screens.
 - `Stairs`: Nursery > Primary > Secondary steps in the Schools section.
 - Photos marked `data-tilt` tilt slightly on hover (desktop only).
 
 Everything scales with its container (1u = 1% of the stage width) and animations are switched off
 for visitors who prefer reduced motion.
+
+## Hero slider
+
+The hero is a full-width photo slider (`Hero` in `src/App.tsx`). Slides, photos, headlines and buttons
+live in the `slides` list in `src/data.ts`; photos are in `public/hero-*.jpg`. Add `portrait: true` to a
+slide whose photo is tall, so it is shown large on the right instead of being cropped. Autoplay pauses on
+hover or focus, and it supports arrows, the numbered progress bars, the keyboard and touch swipe.
