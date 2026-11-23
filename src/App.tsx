@@ -89,13 +89,16 @@ function Hero() {
       {slides.map((s, k) => (
         <div
           key={s.img}
-          className={`hslide${k === i ? " on" : ""}`}
+          className={`hslide${k === i ? " on" : ""}${(s as { portrait?: boolean }).portrait ? " portrait" : ""}`}
           role="group"
           aria-roledescription="slide"
           aria-label={`${k + 1} of ${n}`}
           aria-hidden={k !== i}
         >
           <div className="hbg"><img className="hbg-img" src={s.img} alt="" style={{ objectPosition: s.pos }} /></div>
+          {(s as { portrait?: boolean }).portrait && (
+            <img className="hfg" src={s.img} alt="" style={{ objectPosition: s.pos }} />
+          )}
           <div className="wrap hcopy">
             <div className="hcopy-in">
               {k === 0

@@ -116,6 +116,31 @@ h3 { font-size: 1.6rem; letter-spacing: -0.015em; }
   linear-gradient(90deg, rgba(6,32,24,0.92) 0%, rgba(6,32,24,0.74) 36%, rgba(6,32,24,0.28) 68%, rgba(6,32,24,0.12) 100%),
   linear-gradient(0deg, rgba(6,32,24,0.65) 0%, transparent 38%); }
 
+/* Portrait hero (primary): photo kept upright on the right, full group visible */
+.hfg { display: none; }
+@media (min-width: 900px) {
+  .hslide.portrait .hbg {
+    background: linear-gradient(115deg, #06221a 0%, #0c3a2b 45%, #145a40 100%);
+  }
+  .hslide.portrait .hbg-img { display: none; }
+  .hslide.portrait .hbg::after { display: none; }
+  .hfg {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(46%, 520px);
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 42%;
+    border-radius: 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.55) 8%, #000 22%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.55) 8%, #000 22%);
+  }
+  .hslide.portrait .hcopy-in { max-width: 520px; }
+}
+
 .hcopy { position: absolute; inset: 0; display: flex; align-items: center; padding-bottom: 4.5rem; }
 .hcopy-in { max-width: 640px; }
 .htitle { margin-top: 0; font: 500 clamp(2.6rem, 5.6vw, 4.75rem) / 1.02 var(--serif); letter-spacing: -0.03em; text-wrap: balance; }

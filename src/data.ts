@@ -189,7 +189,7 @@ export const gallery = [
 export const slides = [
   {
     img: "/hero-secondary.jpg",
-    pos: "50% 3%",
+    pos: "50% 35%",
     tag: "",
     short: "01",
     title: "Discipline today, success tomorrow.",
@@ -198,7 +198,7 @@ export const slides = [
   },
   {
     img: "/hero-nursery.jpg",
-    pos: "50% 14%",
+    pos: "50% 40%",
     tag: "",
     short: "02",
     title: "Where curiosity takes root.",
@@ -207,12 +207,13 @@ export const slides = [
   },
   {
     img: "/hero-primary.jpg",
-    pos: "50% 45%",
+    pos: "50% 42%",
     tag: "",
     short: "03",
     title: "Foundations that last.",
     text: "Clear progress in literacy and numeracy, guided by teachers who know every child and expect their best.",
     cta: ["Book a school visit", "#admissions"],
+    portrait: true,
   },
 ];
 
