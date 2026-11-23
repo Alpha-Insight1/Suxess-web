@@ -99,7 +99,6 @@ function Hero() {
           {s.portrait && <img className="hfg" src={s.img} alt="" />}
           <div className="wrap hcopy">
             <div className="hcopy-in">
-              <span className="htag">{s.tag}</span>
               {k === 0
                 ? <h1 className="htitle">{s.title}</h1>
                 : <p className="htitle" role="heading" aria-level={2}>{s.title}</p>}
@@ -117,9 +116,9 @@ function Hero() {
         <div className="wrap hero-ui-in">
           <div className="segs" role="group" aria-label="Choose slide">
             {slides.map((s, k) => (
-              <button key={s.img} className={k === i ? "seg on" : "seg"} data-paused={paused} onClick={() => go(k)} aria-label={`Show slide ${k + 1}: ${s.short}`} aria-current={k === i}>
+              <button key={s.img} className={k === i ? "seg on" : "seg"} data-paused={paused} onClick={() => go(k)} aria-label={`Show slide ${k + 1}`} aria-current={k === i}>
                 {k === i && <i key={`${i}-${paused}`} />}
-                <span><b>0{k + 1}</b>{s.short}</span>
+                <span><b>0{k + 1}</b></span>
               </button>
             ))}
           </div>
@@ -155,8 +154,8 @@ function About() {
         <img className="photo" data-tilt src="/about-students.jpg" alt="Three Suxess High School students in green jackets reading together from their textbooks" loading="lazy" width="1200" height="900" style={{ objectPosition: "50% 35%" }} />
         <div>
           <h2>Results follow habits.</h2>
-          <p className="body">Our children learn to arrive prepared, work with care and treat others well, and the academic gains follow. {school.tagline}</p>
-          <p className="body">Three arms under one roof: Suxess Starlets for nursery and primary, Suxess High School for secondary, and the Suxess Tuition Centre for exam preparation and adult learners.</p>
+          <p className="body">Children who arrive prepared, work carefully and treat others with respect go further — in class and in life. {school.tagline}</p>
+          <p className="body">Suxess Starlets covers nursery and primary, Suxess High School covers secondary, and our Tuition Centre supports exam candidates and adult learners at three convenient locations.</p>
           <dl className="stats">{stats.map(([a, b]) => <div key={b}><dt>{b}</dt><dd>{a}</dd></div>)}</dl>
           <a className="btn btn-dark" href="#admissions">Book a school visit</a>
         </div>
@@ -171,8 +170,8 @@ function Schools() {
       <div className="wrap">
         <div className="sec-head with-3d">
           <div>
-            <h2>Small steps, big dreams.</h2>
-            <p className="lede">One school family from a child's first day to graduation, with the same standards of discipline at every stage.</p>
+            <h2>From first steps to graduation.</h2>
+            <p className="lede">One continuous journey under the same high standards — nursery, primary and secondary, side by side.</p>
           </div>
           <Stairs />
         </div>
@@ -207,8 +206,8 @@ function Programmes() {
     <section className="sec" id="programmes">
       <div className="wrap">
         <div className="sec-head">
-          <h2>Beyond the classroom</h2>
-          <p className="lede">Exam coaching, language training, scholarships and digital skills for students and adult learners.</p>
+          <h2>Programmes that open doors</h2>
+          <p className="lede">Exam coaching, IELTS, scholarship guidance and digital skills for students and adult learners.</p>
         </div>
         <div className="prog">
           <div className="tabs" role="tablist" aria-label="Programmes" aria-orientation="vertical" onKeyDown={onKey}>
@@ -241,8 +240,8 @@ function Life() {
     <section className="sec tint" id="life">
       <div className="wrap">
         <div className="sec-head">
-          <h2>Learning beyond the textbook</h2>
-          <p className="lede">Cooking, chess, exercise and enterprise: the habits that make good students also make capable adults.</p>
+          <h2>Learning beyond the classroom</h2>
+          <p className="lede">Cooking, chess, physical exercise and practical skills — experiences that build confident, capable young people.</p>
         </div>
         <div className="mosaic">
           <figure className="m-a" data-tilt><img src={gallery[0].src} alt={gallery[0].alt} loading="lazy" style={{ objectPosition: gallery[0].pos }} /><figcaption>{gallery[0].caption}</figcaption></figure>
